@@ -1,0 +1,38 @@
+[
+   {
+    "userName": "admin",
+    "password": "admin1",
+    "label":"valid Creadential",
+    "status":"success"
+    },
+    {
+    "userName": "admin",
+    "password": "vimal",
+    "label":"wrong password",
+    "status":"success Failed"
+    },
+    {
+    "userName": "adminvimal",
+    "password": "admin1",
+    "label":"wrong userName",
+    "status":"success Failed"
+    },
+    {
+    "userName": "",
+    "password": "admin1",
+    "label":"blank userName",
+    "status":"success Failed"
+    },
+    {
+    "userName": "admin",
+    "password": "",
+    "label":"blank password",
+    "status":"success Failed"
+    },
+    {
+    "userName": "",
+    "password": "",
+    "label":"blank userName and Password",
+    "status":"success Failed"
+    }
+]

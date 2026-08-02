@@ -1,0 +1,32 @@
+
+ {
+    "VT001":{
+        "UpdatedFirstName":"Shani",
+        "UpdatedLastName":"Bind",
+        "UpdatedCompanyName":"EVA Mondh"
+    },
+
+    "VT002":{
+       "UpdatedTitle":"QA Tester",
+       "UpdatedEmail":"shani@gmail.com",
+       "UpdatedMobileNumber":"7800628140"
+    },
+    "ValidationData":{
+        "expectedNewLeadValidation": "Lead Information",
+        "expectedLoginPageTitle": "vtiger CRM 5 - Commercial Open Source CRM",
+        "expectedLoginPageURL": "http://localhost:8888/",
+        "expectedHomePageTitle": " Administrator - Home - vtiger CRM 5 - Commercial Open Source CRM",
+        "expectedHomePageUrl": "http://localhost:8888/index.php?module=Home&action",
+        "expectedLeadLandingPageTitle": " Administrator - Leads - vtiger CRM 5 - Commercial Open Source CRM",
+        "expectedLeadLandingPageURL": "http://localhost:8888/index.php?module=Leads&action=index",
+        "expectedLeadDetailPageTitle": " Administrator - Leads - vtiger CRM 5 - Commercial Open Source CRM",
+        "expectedLeadDetailPageURL": "http://localhost:8888/index.php?action=DetailView&module=Leads&record",
+        "expectedFeedbackPageUrl": "https://www.vtiger.com/products/crm/feedback.php"
+    },
+    "feedBackPageDiscriptionData":{
+        "discriptionDetail":"firstly we use our framework playwright with typescript and my framework in code reusible and code redendencey more flexiblity in my framework four layer first layer is utility layer "
+    }
+
+
+}
+

@@ -1,0 +1,40 @@
+{
+    "HitUrl": {
+        "url": "http://localhost:8888/"
+    },
+    "login": {
+        "userName": "admin",
+        "userPassword": "admin1"
+    },
+    "Mandatory_Fields_ForLeadCreation": {
+        "lastName": "Bind",
+        "company": "eva automation Hub"
+    },
+    "CreateLeadWithAllFields":{
+        "label": "Lead for Vimal",
+        "titleOfName": "Mr.",
+        "firstName": "Vimal",
+        "lastName": "Bind",
+        "company": "eva automation Hub",
+        "Title": "Doctor,Teacher",
+        "phone": "+22 5463 78596",
+        "mobile": "7800628135",
+        "leadSource": "Partner",
+        "industry": "Education",
+        "annualRevenue": "201",
+        "noOfEmployee": "10",
+        "secondryEmail": "evastudent@gmail.com",
+        "faxId": "evamondh.fax",
+        "emailId": "eva@gmail.com",
+        "website": "www.evahub.com",
+        "leadStatus": "Cold",
+        "rating": "Active",
+        "street": "Nigoh road shiv baba mandir",
+        "POBox": "nigoh",
+        "postalCode": "222162",
+        "city": "Jaunpur",
+        "state": "Uttar pradesh",
+        "country": "India",
+        "discription": "we have use framework in this test cases "
+    }
+}
