@@ -1,0 +1,298 @@
+name: Playwright Automation CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - qa
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select Environment"
+        required: true
+        type: choice
+        default: qa
+        options:
+          - qa
+          - uat
+          - production
+      test_type:
+        description: "Select Test Type"
+        required: true
+        type: choice
+        default: all
+        options:
+          - all
+          - smoke
+          - regression
+          - login
+          - lead
+
+# ============================================================
+# PERMISSIONS
+# ============================================================
+
+permissions:
+  contents: read
+
+# ============================================================
+# CONCURRENCY
+# ============================================================
+
+concurrency:
+  group: playwright-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright-test:
+    name: Playwright Automation
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ inputs.environment || 'qa' }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Display Test Information
+        run: |
+          echo "======================================"
+          echo "Playwright Automation Execution"
+          echo "======================================"
+
+          echo "Branch      : ${{ github.ref_name }}"
+          echo "Environment : ${{ inputs.environment || 'qa' }}"
+          echo "Test Type   : ${{ inputs.test_type || 'all' }}"
+          echo "Triggered By: ${{ github.actor }}"
+
+          echo "======================================"
+
+      # ======================================================
+      # 4. INSTALL DEPENDENCIES
+      # ======================================================
+
+      - name: Install Dependencies
+
+        run: npm ci
+
+      # ======================================================
+      # 5. INSTALL PLAYWRIGHT
+      # ======================================================
+
+      - name: Install Playwright Browsers
+
+        run: npx playwright install --with-deps
+
+      # ======================================================
+      # 6. CREATE ENVIRONMENT FILE
+      # ======================================================
+
+      - name: Setup Environment
+
+        run: |
+
+          echo "Setting environment..."
+
+          if [ "${{ inputs.environment }}" = "qa" ]; then
+            echo "BASE_URL=${{ secrets.QA_BASE_URL }}" >> $GITHUB_ENV
+
+          elif [ "${{ inputs.environment }}" = "uat" ]; then
+            echo "BASE_URL=${{ secrets.UAT_BASE_URL }}" >> $GITHUB_ENV
+
+          elif [ "${{ inputs.environment }}" = "production" ]; then
+            echo "BASE_URL=${{ secrets.PROD_BASE_URL }}" >> $GITHUB_ENV
+
+          else
+            echo "BASE_URL=${{ secrets.QA_BASE_URL }}" >> $GITHUB_ENV
+          fi
+
+      # ======================================================
+      # 7. RUN PLAYWRIGHT TEST
+      # ======================================================
+
+      - name: Run Playwright Tests
+
+        id: playwright
+
+        continue-on-error: true
+
+        run: |
+
+          echo "Running Playwright tests..."
+
+          TEST_TYPE="${{ inputs.test_type || 'all' }}"
+
+          if [ "$TEST_TYPE" = "all" ]; then
+
+            npx playwright test
+
+          else
+
+            npx playwright test --grep "@$TEST_TYPE"
+
+          fi
+      - name: Upload Playwright HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report/
+          retention-days: 30
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 30
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots
+          path: |
+            test-results/**/*.png
+            test-results/**/*.jpg
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Upload Videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-videos
+          path: |
+            test-results/**/*.webm
+            test-results/**/*.mp4
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Upload Playwright Trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: |
+            test-results/**/*.zip
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Create Job Summary
+        if: always()
+        run: |
+          echo "# Playwright Automation Result" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Execution Details" >> $GITHUB_STEP_SUMMARY
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment | ${{ inputs.environment || 'qa' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Type | ${{ inputs.test_type || 'all' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Triggered By | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check Test Result
+        if: always()
+        run: |
+          if [ "${{ steps.playwright.outcome }}" != "success" ]; then
+            echo "Playwright tests failed."
+            exit 1
+          fi
+          echo "Playwright tests passed."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Playwright Tests
+# on:
+#   push:
+#     branches: [ main, master ]
+#   pull_request:
+#     branches: [ main, master ]
+# jobs:
+#   test:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v4
+#     - uses: actions/setup-node@v4
+#       with:
+#         node-version: lts/*
+#     - name: Install dependencies
+#       run: npm ci
+#     - name: Install Playwright Browsers
+#       run: npx playwright install --with-deps
+#     - name: Run Playwright tests
+#       run: npx playwright test
+#     - uses: actions/upload-artifact@v4
+#       if: ${{ !cancelled() }}
+#       with:
+#         name: playwright-report
+#         path: playwright-report/
+#         retention-days: 30
