@@ -2,7 +2,8 @@ name: Playwright Automation CI
 
 on:
   push:
-    branches:
+  inputs:
+    branch:
       - main
       - develop
       - qa
@@ -10,8 +11,20 @@ on:
     branches:
       - main
       - develop
+      
   workflow_dispatch:
     inputs:
+
+      branch:
+        description: "Select Branch"
+        required: true
+        type: choice
+        default: main
+        options:
+          - main
+          - develop
+          - qa
+          - uat
       environment:
         description: "Select Environment"
         required: true
@@ -19,7 +32,7 @@ on:
         default: qa
         options:
           - qa
-          - uat
+          - stagging
           - production
       test_type:
         description: "Select Test Type"
@@ -30,8 +43,7 @@ on:
           - all
           - smoke
           - regression
-          - login
-          - lead
+
 
 # ============================================================
 # PERMISSIONS
